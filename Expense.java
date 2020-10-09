@@ -1,9 +1,10 @@
 package Shapes;
 
 public class Expense extends Transactions {
-    public Expense( int month, int amount){
+    public Expense( String tittle, int month, int amount){
         setMonth(month);
         setAmount(amount);
-        setTittle("Expense");
+        setTittle(tittle);
+        setType("Expenses");
     }
 }

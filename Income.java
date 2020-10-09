@@ -1,10 +1,11 @@
 package Shapes;
 
 public class Income extends Transactions {
-    public Income (int month, int amount){
+    public Income (String tittle, int month, int amount){
         setMonth(month);
         setAmount(amount);
-        setTittle("Income");
+        setTittle(tittle);
+        setType("Income");
 
     }
 
