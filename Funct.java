@@ -2,6 +2,7 @@ package Shapes;
 
 import Shapes.Transactions;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,8 +13,16 @@ public class Funct {
     // Create ArrayList of all transaction
 
     ArrayList<Transactions> transactionList = new ArrayList<Transactions>();
+    FileOutputStream fs = new FileOutputStream("testSer.ser");
+    ObjectOutputStream os = new ObjectOutputStream(fs);
 
-    void startApp() throws InterruptedException {
+    FileInputStream fis = new FileInputStream("testSer.ser");
+    ObjectInputStream ois = new ObjectInputStream(fis);
+
+    public Funct() throws IOException {
+    }
+
+    void startApp() throws InterruptedException, IOException {
         boolean condit = true;
         System.out.println("Welcome to TrackMoney");
         while (condit) { // display the menu, take user input and revert
@@ -22,7 +31,7 @@ public class Funct {
             int option = scan.nextInt();
             switch (option) {
                 case 1:
-                    showTransactions();
+                    showTrans();
                     break;
 
                 case 2:
@@ -44,8 +53,8 @@ public class Funct {
         }
     }
 
-    public void showTransactions() {  // Method to see cash transaction
-        System.out.println("Please select one option \n If you want to see all transactions press 1 \n if you want to see only expenses press 2 \n If you want see only Incomes press 3");
+    public void showTrans() {  // Method to see cash transaction
+        System.out.println("Please select one option \n If you want to see all press 1 \n if you want to see only expenses press 2 \n If you want see only income press 3");
         int opt1 = scan.nextInt();
         switch (opt1) {
             case 1:
@@ -71,7 +80,6 @@ public class Funct {
                     }
                 }
                 break;
-
             case 3:
                 for (int i = 0; i < transactionList.size(); i++) {
                     String type = transactionList.get(i).getType();
@@ -89,61 +97,60 @@ public class Funct {
         }
     }
     // Method to add cash transaction
-    public void addItem() { //this function add the new transactions
-        System.out.println("Press 1 if want to add expenses or press 2 if you want to add income.");
-        int opt2 = scan.nextInt();
-        switch (opt2) {
-            case 1:
+    public void addItem() throws IOException { //this function add the new transactions
+        while(true){
+            System.out.println("Press 1 if want to add expenses or press 2 if you want to add income.");
+            int opt2 = scan.nextInt();
+            if (opt2 == 1) {
+                System.out.println("Write description of transaction ");
+                String tittle = scan.next();
+                System.out.println(tittle);
                 System.out.println(" Enter the month (1-12) ");
                 int month = scan.nextInt();
                 System.out.println(" Enter the amount ");
                 int amount = scan.nextInt();
+                transactionList.add(new Expense(tittle, month, amount));
+                os.writeObject(transactionList);
+             break;
+            } else if (opt2 ==2) {
                 System.out.println("Write description of transaction ");
                 String tittle = scan.next();
-                tittle += scan.nextLine();
-                transactionList.add(new Expense(tittle,month, amount));
-                break;
-            case 2:
                 System.out.println(" Enter the month (1-12) ");
-                month = scan.nextInt();
+                int month = scan.nextInt();
                 System.out.println(" Enter the amount ");
-                amount = scan.nextInt();
-                System.out.println("Write description of transaction ");
-                tittle = scan.next();
-                tittle += scan.nextLine();
+                int amount = scan.nextInt();
                 transactionList.add(new Income(tittle, month, amount));
-                break;
-            default:
+                os.writeObject(transactionList);
+            break;
+            } else {
                 System.out.println("No valid choice, try again\n");
-        }
-    }
-    public void removeItem() {     // this function remove and edit the transaction
+                }
+        }}
+    public void removeItem() throws IOException {     // this function remove and edit the transaction
         showAll();
         System.out.println("Please enterl S.no of item to be edit or remove");
         int choose = scan.nextInt();
         System.out.println("For delete this item press 1 or press 2 for edit ");
         int isRemove = scan.nextInt();
-        switch (isRemove) {
-            case 1:
-                transactionList.remove(choose - 1);
-                break;
-            case 2:
-                System.out.println("Write new tittle ");
-                String tittle = scan.next();
-                System.out.println("Change the month (select month between 1-12) ");
-                int month = scan.nextInt();
-                System.out.println("New the amount ");
-                int amount = scan.nextInt();
-                System.out.println("write Income or Expense ");
-                String type = scan.next();
-                type += scan.nextLine();
-                transactionList.set(choose - 1, new Transactions(tittle, month, amount, type));
-                break;
-            default:
-                System.out.println("No valid choice, try again\n");
+        if (isRemove == 1) {
+            transactionList.remove(choose - 1);
+            os.writeObject(transactionList);
+        }else if(isRemove ==2) {
+            System.out.println("Write new tittle ");
+            String tittle = scan.next();
+            System.out.println("Change the month (select month between 1-12) ");
+            int month = scan.nextInt();
+            System.out.println("New the amount ");
+            int amount = scan.nextInt();
+            System.out.println("write Income or Expense ");
+            String type = scan.next();
+            transactionList.set(choose - 1, new Transactions(tittle, month, amount, type));
+            os.writeObject(transactionList);
+        } else {
+            System.out.println("No valid choice, try again\n");
         }
     }
-    public void showAll() {    // This function show all the transaction and details
+    public void showAll(){     // This function show all the transaction and details
         for (int i = 0; i < transactionList.size(); i++) {
             int snum = i + 1;
             String head = transactionList.get(i).getTittle();
@@ -165,6 +172,14 @@ public class Funct {
             }
         }
         return balance;
+    }
+    public void getAll(){
+        System.out.println(" Enter the month (1-12) ");
+        int month = scan.nextInt();
+        System.out.println(" Enter the amount ");
+        int amount = scan.nextInt();
+        System.out.println("Write description of transaction ");
+        String tittle = scan.next();
     }
 
 }
