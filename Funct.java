@@ -22,7 +22,7 @@ public class Funct {
             int option = scan.nextInt();
             switch (option) {
                 case 1:
-                    showTrans();
+                    showTransactions();
                     break;
 
                 case 2:
@@ -44,8 +44,8 @@ public class Funct {
         }
     }
 
-    public void showTrans() {  // Method to see cash transaction
-        System.out.println("Please select one option \n If you want to see all press 1 \n if you want to see only expenses press 2 \n If you want see only income press 3");
+    public void showTransactions() {  // Method to see cash transaction
+        System.out.println("Please select one option \n If you want to see all transactions press 1 \n if you want to see only expenses press 2 \n If you want see only Incomes press 3");
         int opt1 = scan.nextInt();
         switch (opt1) {
             case 1:
@@ -100,6 +100,7 @@ public class Funct {
                 int amount = scan.nextInt();
                 System.out.println("Write description of transaction ");
                 String tittle = scan.next();
+                tittle += scan.nextLine();
                 transactionList.add(new Expense(tittle,month, amount));
                 break;
             case 2:
@@ -109,6 +110,7 @@ public class Funct {
                 amount = scan.nextInt();
                 System.out.println("Write description of transaction ");
                 tittle = scan.next();
+                tittle += scan.nextLine();
                 transactionList.add(new Income(tittle, month, amount));
                 break;
             default:
@@ -134,6 +136,7 @@ public class Funct {
                 int amount = scan.nextInt();
                 System.out.println("write Income or Expense ");
                 String type = scan.next();
+                type += scan.nextLine();
                 transactionList.set(choose - 1, new Transactions(tittle, month, amount, type));
                 break;
             default:
