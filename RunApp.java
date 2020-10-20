@@ -5,7 +5,7 @@ import Shapes.Transactions;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Functions {
+public class RunApp {
     Scanner scan = new Scanner(System.in);
     int balance;
 
